@@ -1,0 +1,12 @@
+# .gitignore
+.DS_Store
+node_modules/
+dist/
+*.log
+.env
+.clawhub/
+TOOLS.md
+USER.md
+memory/heartbeat-state.json
+skills/
+**/skills/
