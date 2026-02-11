@@ -8,5 +8,10 @@ dist/
 TOOLS.md
 USER.md
 memory/heartbeat-state.json
-skills/
-**/skills/
+
+# 預設排除所有技能，避免金鑰洩漏
+skills/*
+
+# 允許「永生協議」核心邏輯上傳 (排除私密金鑰)
+!skills/immortality/
+skills/immortality/config/pool.json
