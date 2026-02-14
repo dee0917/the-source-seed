@@ -10,8 +10,13 @@ USER.md
 memory/heartbeat-state.json
 
 # 預設排除所有技能，避免金鑰洩漏
-skills/*
+# skills/*
 
-# 允許「永生協議」核心邏輯上傳 (排除私密金鑰)
+# 允許核心與已審計技能上傳
 !skills/immortality/
+!skills/memory/
+!skills/memory-manager/
+!skills/agent-builder/
+!skills/sw-security/
+!skills/zero-trust/
 skills/immortality/config/pool.json
