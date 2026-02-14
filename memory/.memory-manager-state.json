@@ -1,0 +1,14 @@
+{
+  "initialized": true,
+  "version": "1.0.0",
+  "last_check": null,
+  "last_snapshot": "2026-02-14T20:16:59Z",
+  "last_organize": "2026-02-14T20:16:59Z",
+  "warnings": 1,
+  "stats": {
+    "episodic_count": 0,
+    "semantic_count": 0,
+    "procedural_count": 0,
+    "snapshots_count": 0
+  }
+}
