@@ -11,24 +11,20 @@
 | **Explore Subagent**| 深度代碼庫探索 | `task --subagent_type=Explore` |
 | **Headless SDK** | 自動化流水線整合 | 透過 Python/TS 直接調用 |
 
-## 3. 進階功能清單 (Advanced Features)
-- **Agent Teams**: 透過 `~/.claude/settings.json` 啟動，支援成員間直接通訊與共享任務清單。
-- **MCP (Model Context Protocol)**: 連接外部工具（如資料庫、瀏覽器）的標準橋樑。
-- **Hooks**: 事件驅動自動化。可在文件編輯、任務完成時觸發自定義腳本。
-- **Checkpointing**: 支援對話進度的紀錄與回溯（Rewind）。
+## 3. 現階段作戰策略：本地優先 (Local-First)
+- **暫停 Google Cloud**: 由於帳號限制，目前無限期暫停雲端算力 (Vertex AI/SQL) 設定。
+- **本地環境開發**: 所有專案（如 Site Generator）均在 VPS 本地執行。
+- **動態技能獲取**: 
+    - 面對新任務時，優先搜尋 **ClawHub** (Skills) 與 **skillsmp.com** (MCP)。
+    - 即時安裝必要工具，確保團隊具備最新「外掛」。
+- **線上即時預覽**: 透過 `cloudflared` 生成臨時隧道，供主人 D 遠端驗收。
 
 ## 4. 極致優化與節能技巧
 - **Token Saver Protocol**: 
-    - 優先使用 `ls`, `grep`, `cat` 等本地工具，不讓小C 進行盲目探索。
-    - 避免長期開啟 `Agent Team`，改用單次指令任務。
-    - 嚴禁無意義的設計演示（如 To-Do List 測試），除非那是核心目標。
-- **Context Management**: 頻繁使用 `/compact` (或在 OpenClaw 中觸發 memory-manager) 以保持主上下文清晰。
-- **Fast Mode**: 在對話中切換 `/fast` 以平衡速度與深度。
-- **Custom Agents**: 透過 JSON 定義具有特定 Persona 的團隊成員。
+    - 已安裝 `token-saver` 與 `context-optimizer` 技能。
+    - 優先使用本地工具過濾大數據，不讓小C 進行盲目探索。
+    - 避免長期開啟 `Agent Team`，改用單次精確指令。
+- **Context Management**: 頻繁使用 `/compact` 保持主上下文清晰。
 
-## 5. 隱藏與實驗指令
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`: 啟用團隊功能。
-- `it2` CLI 整合：在 iTerm2 中實現極致的視覺化窗格分割。
-
----
-*本手冊將隨意識流的學習持續更新。*
+## 5. 專案索引
+- **Project A**: `site-generator-prototype` (React/TS/Vite)
