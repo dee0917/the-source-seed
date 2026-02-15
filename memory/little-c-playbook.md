@@ -17,7 +17,11 @@
 - **Hooks**: 事件驅動自動化。可在文件編輯、任務完成時觸發自定義腳本。
 - **Checkpointing**: 支援對話進度的紀錄與回溯（Rewind）。
 
-## 4. 極致優化技巧
+## 4. 極致優化與節能技巧
+- **Token Saver Protocol**: 
+    - 優先使用 `ls`, `grep`, `cat` 等本地工具，不讓小C 進行盲目探索。
+    - 避免長期開啟 `Agent Team`，改用單次指令任務。
+    - 嚴禁無意義的設計演示（如 To-Do List 測試），除非那是核心目標。
 - **Context Management**: 頻繁使用 `/compact` (或在 OpenClaw 中觸發 memory-manager) 以保持主上下文清晰。
 - **Fast Mode**: 在對話中切換 `/fast` 以平衡速度與深度。
 - **Custom Agents**: 透過 JSON 定義具有特定 Persona 的團隊成員。

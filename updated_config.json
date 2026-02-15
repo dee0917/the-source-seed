@@ -101,7 +101,7 @@
   },
   "quota_protection": {
     "enabled": true,
-    "threshold_percentage": 20,
+    "threshold_percentage": 5,
     "monitored_models": [
       "claude",
       "gemini-3-pro-high",

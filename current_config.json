@@ -7,7 +7,7 @@
   "sync_interval": 5,
   "default_export_path": null,
   "proxy": {
-    "enabled": false,
+    "enabled": true,
     "allow_lan_access": true,
     "auth_mode": "all_except_health",
     "port": 8045,
@@ -43,9 +43,9 @@
         "vision_enabled": false
       }
     },
-    "user_agent_override": null,
+    "user_agent_override": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.92.2 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36",
     "scheduling": {
-      "mode": "Balance",
+      "mode": "CacheFirst",
       "max_wait_seconds": 60
     },
     "experimental": {
@@ -100,8 +100,8 @@
     ]
   },
   "quota_protection": {
-    "enabled": false,
-    "threshold_percentage": 10,
+    "enabled": true,
+    "threshold_percentage": 20,
     "monitored_models": [
       "claude",
       "gemini-3-pro-high",
