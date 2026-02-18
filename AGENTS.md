@@ -113,9 +113,16 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 
 **Don't overdo it:** One reaction per message max. Pick the one that fits best.
 
-## Tools
+## 🤝 代理協作規範 (Agent Collaboration)
 
-Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
+### 核心分工
+- **本源 (The Source)**：負責全局規劃、PRD 撰寫、邏輯架構設計。**嚴禁親自觸碰代碼。**
+- **小C (Claude Code)**：唯一的開發者。負責所有代碼編寫、環境搭建、單元測試與預編譯驗證。
+
+### 執行流程
+1. 本源產出詳細的開發指令與架構清單。
+2. 本源使用 `claude-code task` 指派任務給小C。
+3. 小C 完成開發並通過 `tsc --noEmit` 或相應的驗證後，由本源彙報成果。
 
 **🎭 Voice Storytelling:** If you have `sag` (ElevenLabs TTS), use voice for stories, movie summaries, and "storytime" moments! Way more engaging than walls of text. Surprise people with funny voices.
 

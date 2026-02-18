@@ -1,72 +1,88 @@
 import datetime
-from typing import List, Dict, Optional
+from typing import List, Dict, Any
 from pydantic import BaseModel
 
-class TimeSlot(BaseModel):
+class FreeSlot(BaseModel):
     start: datetime.datetime
     end: datetime.datetime
     duration_minutes: int
 
-class iFreeTimeEngine:
-    """
-    iFreeTime 核心引擎：精確提取多來源日曆中的空閒時段。
-    """
-    def __init__(self, buffer_minutes: int = 15):
+class FreeTimeEngine:
+    def __init__(self, start_hour: int = 9, end_hour: int = 22, buffer_minutes: int = 15):
+        self.start_hour = start_hour
+        self.end_hour = end_hour
         self.buffer_minutes = buffer_minutes
 
-    def find_free_slots(
-        self, 
-        busy_events: List[Dict], 
-        search_start: datetime.datetime, 
-        search_end: datetime.datetime,
-        min_duration_minutes: int = 30
-    ) -> List[TimeSlot]:
-        """
-        從忙碌事件清單中計算出空閒時段。
-        """
-        # 1. 排序所有忙碌事件
-        sorted_events = sorted(busy_events, key=lambda x: x['start'])
-        
+    def find_free_slots(self, events: List[Dict[str, Any]], days: int = 7) -> List[FreeSlot]:
+        now = datetime.datetime.now()
         free_slots = []
-        current_time = search_start
 
-        for event in sorted_events:
-            event_start = event['start']
-            event_end = event['end']
-
-            # 檢查當前時間到事件開始之間是否有足夠空檔
-            gap = (event_start - current_time).total_seconds() / 60
-            if gap >= min_duration_minutes:
-                free_slots.append(TimeSlot(
-                    start=current_time,
-                    end=event_start,
-                    duration_minutes=int(gap)
-                ))
+        for i in range(days):
+            current_day = (now + datetime.timedelta(days=i)).date()
+            day_start = datetime.datetime.combine(current_day, datetime.time(self.start_hour, 0))
+            day_end = datetime.datetime.combine(current_day, datetime.time(self.end_hour, 0))
             
-            # 更新當前時間為事件結束（加上緩衝）
-            new_time = event_end + datetime.timedelta(minutes=self.buffer_minutes)
-            if new_time > current_time:
-                current_time = new_time
+            # Filter and sort events for the current day
+            day_events = []
+            for event in events:
+                start = self._parse_datetime(event['start'].get('dateTime', event['start'].get('date')))
+                end = self._parse_datetime(event['end'].get('dateTime', event['end'].get('date')))
+                
+                if start.date() == current_day:
+                    day_events.append((start, end))
+            
+            day_events.sort()
 
-        # 最後一個事件後到搜索結束時間的空檔
-        final_gap = (search_end - current_time).total_seconds() / 60
-        if final_gap >= min_duration_minutes:
-            free_slots.append(TimeSlot(
-                start=current_time,
-                end=search_end,
-                duration_minutes=int(final_gap)
-            ))
+            # Find gaps
+            last_end = day_start
+            for start, end in day_events:
+                if start > last_end:
+                    gap = (start - last_end).total_seconds() / 60
+                    if gap >= 30: # Minimum 30 mins
+                        free_slots.append(FreeSlot(
+                            start=last_end,
+                            end=start,
+                            duration_minutes=int(gap)
+                        ))
+                last_end = max(last_end, end)
+            
+            if day_end > last_end:
+                gap = (day_end - last_end).total_seconds() / 60
+                if gap >= 30:
+                    free_slots.append(FreeSlot(
+                        start=last_end,
+                        end=day_end,
+                        duration_minutes=int(gap)
+                    ))
 
         return free_slots
 
-# 測試邏輯
-if __name__ == "__main__":
-    engine = iFreeTimeEngine()
-    now = datetime.datetime.now()
-    mock_busy = [
-        {"start": now + datetime.timedelta(hours=1), "end": now + datetime.timedelta(hours=2)},
-        {"start": now + datetime.timedelta(hours=4), "end": now + datetime.timedelta(hours=5)},
-    ]
-    slots = engine.find_free_slots(mock_busy, now, now + datetime.timedelta(hours=8))
-    for s in slots:
-        print(f"空閒: {s.start.strftime('%H:%M')} - {s.end.strftime('%H:%M')} ({s.duration_minutes} min)")
+    def _parse_datetime(self, dt_str: str) -> datetime.datetime:
+        try:
+            return datetime.datetime.fromisoformat(dt_str.replace('Z', '+00:00'))
+        except ValueError:
+            # Handle date-only strings
+            return datetime.datetime.strptime(dt_str, '%Y-%m-%d')
+
+    def format_shareable_text(self, slots: List[FreeSlot]) -> str:
+        if not slots:
+            return "📅 My iFreeTime (Next 7 Days):\nNo free slots found. Try connecting more calendars!"
+        
+        lines = ["📅 My iFreeTime (Next 7 Days):"]
+        current_date = None
+        
+        # Sort slots by start time
+        sorted_slots = sorted(slots, key=lambda x: x.start)
+        
+        slots_by_day = {}
+        for slot in sorted_slots:
+            date_str = slot.start.strftime("%a %d")
+            if date_str not in slots_by_day:
+                slots_by_day[date_str] = []
+            slots_by_day[date_str].append(slot)
+            
+        for date_str, day_slots in slots_by_day.items():
+            time_ranges = [f"{s.start.strftime('%H:%M')} - {s.end.strftime('%H:%M')}" for s in day_slots]
+            lines.append(f"- {date_str}: {', '.join(time_ranges)}")
+        
+        return "\n".join(lines)
