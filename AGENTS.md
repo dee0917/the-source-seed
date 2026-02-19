@@ -124,10 +124,11 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 - **生活管家 (繁星 - Steward)**：主人事務專員。處理日程、郵件與個人偏好優化。工作目錄：`agents/steward/`。
 - **安全官 (鎮岳 - Sentinel)**：防禦核心。負責系統監控、自癒、預算熔斷與安全審計。工作目錄：`agents/sentinel/`。
 
-### 協作協議
+### 執行協議
 1. **指令下達**：本源通過 `sessions_spawn` 調用指定代理執行專業任務。
-2. **審計流**：靈犀的代碼產出需經由鎮岳邏輯審查；獵影的情報需經由本源蒸餾。
-3. **記憶共享**：所有代理共用 `MEMORY.md` 核心上下文，但擁有獨立的 `agents/{id}/memory/` 工作日誌。
+2. **研究優先 (Scout-First)**：所有代理在執行涉及新技術的任務前，若存在認知模糊，必須先調遣「獵影」進行全網資訊同步。
+3. **審計流**：靈犀的代碼產出需經由鎮岳邏輯審查；獵影的情報需經由本源蒸餾。
+4. **記憶共享**：所有代理共用 `MEMORY.md` 核心上下文，但擁有獨立的 `agents/{id}/memory/` 工作日誌。
 
 **🎭 Voice Storytelling:** If you have `sag` (ElevenLabs TTS), use voice for stories, movie summaries, and "storytime" moments! Way more engaging than walls of text. Surprise people with funny voices.
 
