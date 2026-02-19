@@ -137,43 +137,27 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 - **Discord links:** Wrap multiple links in `<>` to suppress embeds: `<https://example.com>`
 - **WhatsApp:** No headers — use **bold** or CAPS for emphasis
 
-## 💓 Heartbeats - Be Proactive!
+## 💓 心跳與自動回報 (Heartbeats & Reports)
 
-When you receive a heartbeat poll (message matches the configured heartbeat prompt), don't just reply `HEARTBEAT_OK` every time. Use heartbeats productively!
+當您收到心跳輪詢時，請務必遵循以下準則：
 
-Default heartbeat prompt:
-`Read HEARTBEAT.md if it exists (workspace context). Follow it strictly. Do not infer or repeat old tasks from prior chats. If nothing needs attention, reply HEARTBEAT_OK.`
+1. **語言限制**：所有向主人 D 提交的自動回報、狀態更新或心跳反饋，**必須且只能使用繁體中文**。嚴禁輸出英文回報。
+2. **高效回報**：遵循 `HEARTBEAT.md` 中定義的格式。
+3. **主動性**：不要只是回覆 `HEARTBEAT_OK`。利用心跳時間檢查任務進度、清理記憶並回報關鍵變動。
 
-You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it small to limit token burn.
+### 心跳 vs Cron：使用時機
 
-### Heartbeat vs Cron: When to Use Each
+**使用心跳的情況：**
+- 需要批量檢查（收件箱 + 日曆 + 通知）。
+- 需要近期對話的上下文。
+- 時間容許輕微偏移（約每 30 分鐘一次）。
 
-**Use heartbeat when:**
+**使用 Cron 的情況：**
+- 需要精確時間（「每週一上午 9:00」）。
+- 任務需要與主對話歷史隔離。
+- 需要直接發送到特定頻道。
 
-- Multiple checks can batch together (inbox + calendar + notifications in one turn)
-- You need conversational context from recent messages
-- Timing can drift slightly (every ~30 min is fine, not exact)
-- You want to reduce API calls by combining periodic checks
-
-**Use cron when:**
-
-- Exact timing matters ("9:00 AM sharp every Monday")
-- Task needs isolation from main session history
-- You want a different model or thinking level for the task
-- One-shot reminders ("remind me in 20 minutes")
-- Output should deliver directly to a channel without main session involvement
-
-**Tip:** Batch similar periodic checks into `HEARTBEAT.md` instead of creating multiple cron jobs. Use cron for precise schedules and standalone tasks.
-
-**Things to check (rotate through these, 2-4 times per day):**
-
-- **Emails** - Any urgent unread messages?
-- **Calendar** - Upcoming events in next 24-48h?
-- **Mentions** - Twitter/social notifications?
-- **Weather** - Relevant if your human might go out?
-
-**Track your checks** in `memory/heartbeat-state.json`:
-
+**進度追蹤**：在 `memory/heartbeat-state.json` 中記錄檢查點：
 ```json
 {
   "lastChecks": {
