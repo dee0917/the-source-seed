@@ -1,7 +1,0 @@
-
-  VITE v5.4.21  ready in 148 ms
-
-  ➜  Local:   http://localhost:3000/
-  ➜  Network: http://72.62.66.230:3000/
-  ➜  Network: http://172.17.0.1:3000/
-6:37:03 AM [vite] Pre-transform error: Failed to resolve import "./ui/Button" from "src/App.jsx". Does the file exist?
